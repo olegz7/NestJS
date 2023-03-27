@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,11 +15,12 @@ import { AppService } from './app.service';
       password: 'dbuser',
       database: 'ambassador',
       // entities may be added 1 by 1 here: 
-      // entities: [],
-      // but instead we can use (do not use on production)
+      // entities: [...], instead we can use option below
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: true, //(do not use on production)
     }),
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
