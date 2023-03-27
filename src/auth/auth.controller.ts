@@ -33,10 +33,8 @@ export class AuthController {
     }
 
     const hashed = await bcrypt.hash(body.password, 12)
-    // encrypt the password
-    // console.log("hashed pass: ", hashed) // hashed pass:  $2a$12$cnEGDSbVUNnsm7ODKFQs0...
+    // encrypt the password by creating a hash 
 
-    // return body;
     return this.userService.save({
       ...data,
       password: hashed,
@@ -50,7 +48,7 @@ export class AuthController {
     @Body('password') password: string,
     @Res({passthrough: true}) response: Response // passthrough option allows to send cookie from BE to FE
   ) {
-    // const user = await this.userService.findOne({email: email})
+    // const user = await this.userService.findOne({email: email}) // we can use simplier syntax below 
     const user = await this.userService.findOne({email})
     
     if(!user) {
@@ -85,13 +83,10 @@ export class AuthController {
 
     // here we get user id that we previously sent as payload in jwt (during login)
     const {id} = await this.jtwService.verifyAsync(cookie)
-    // console.log("This is ID from admin/user req: ", {id}) // {id : 2}
 
     // get the user
     return this.userService.findOne({id});
 
-    // we can check what cookie contains:
-    // return cookie;
   }
 
   @UseGuards(AuthGuard) // cannot logout if we havent logged in before
@@ -123,7 +118,7 @@ export class AuthController {
       email
     })
 
-    // the update function before doesn't return updated user, that's why we need to call findOne
+    // the userService.update function doesn't return updated user, that's why we need to call findOne
     return this.userService.findOne({id})
 
   }
