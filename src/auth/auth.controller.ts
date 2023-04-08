@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { Request } from 'express';
 import { AuthGuard } from './auth.guard';
+import { faker } from "@faker-js/faker";
 
 
 @Controller()
@@ -146,4 +147,25 @@ export class AuthController {
     return this.userService.findOne({id})
 
   }
+
+
+  // Endpoint for creating ambassadors
+  @Post('admin/register/ambassadors')
+ 
+  async registerAmbassadors() {
+    const registeredAmbassadors = [];
+    for(let i = 0; i < 30; i++) {
+      const newAmbassador = {
+        first_name: faker.name.firstName(),
+        last_name: faker.name.lastName(),
+        email: faker.internet.email(),
+        password: await bcrypt.hash("1234", 12),
+        is_ambassador: true
+      }
+      const savedAmbassador = await this.userService.save(newAmbassador);
+      registeredAmbassadors.push(savedAmbassador);
+    }
+  return registeredAmbassadors;
+  }
+
 }
